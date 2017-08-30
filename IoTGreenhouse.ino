@@ -4,6 +4,8 @@
 #define STEPS 48
 //this is because i have some bug on the temperature calc.
 #define temperatureDif 26
+#define readingPerStep 8
+const int numReadings = 80;
 
 //layout:
 //A0 = LDR
@@ -25,13 +27,10 @@ bool pin10 = false;
 bool pin11 = false;
 bool stepping=false; 
 
-const int numReadings = 20;
-int current=0;
-int A0readings[numReadings];
+int current=0; 
 int A1readings[numReadings];
 int A2readings[numReadings];
-
-float A0avg=0.0;
+ 
 float A1avg=0.0;
 float A2avg=0.0;
 
@@ -119,7 +118,7 @@ thing["D11"] << [](pson & in) {
  
   
   thing["A0"] >> [](pson & out) {
-    out = A0avg;
+    out = analogRead(A0);
   };
   thing["A1"] >> [](pson & out) {
     out = toDegrees( A1avg);
@@ -128,20 +127,21 @@ thing["D11"] << [](pson & in) {
     out = toDegrees(A2avg);
   };
   thing["A3"] >> [](pson & out) {
-    out = (analogRead(A3)>512);
+    out = (analogRead(A3)>512)?"Abierta":"Cerrada";
   };
   
 }
 
 // the loop function runs over and over again forever
 void loop() {
-  A0readings[current]=analogRead(A0);
-  A1readings[current]=analogRead(A1);
-  A2readings[current]=analogRead(A2);
-  current++;
-  current%=numReadings;
-  
-  A0avg=avg(A0readings);
+
+  for(int i =0;i<readingPerStep;i++){
+     A1readings[current]=analogRead(A1);
+    A2readings[current]=analogRead(A2);
+    current++;
+    current%=numReadings;  
+    }
+   
   A1avg=avg(A1readings);
   A2avg=avg(A2readings);
   thing.handle();
