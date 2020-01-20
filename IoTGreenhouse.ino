@@ -1,5 +1,5 @@
 #include <YunClient.h>
-#include <ThingerYun.h>
+#include <ThingerYun.h> //Usar la librería 2.6.0
 #include <Stepper.h>
 #define STEPS 48
 //this is because i have some bug on the temperature calc.
@@ -16,10 +16,10 @@ const int numReadings = 80;
 //D10 =Fan1
 //D11 =Fan2
 //D13 =onBoardLed
-//Stepper: D3,D4,D5,D6 cables named 4 3 1 ??
-Stepper stepper(STEPS, 3, 4,5,6);
+//Stepper: D3,D4,D5,D6 cables named 4 3 ?? 1 
+Stepper stepper(STEPS,3,4,5,6);
 
-ThingerYun thing("****", "****", "****");
+ThingerYun thing("***", "***", "***");
 bool pin13 = false;
 bool pin8 = false;
 bool pin9 = false;
